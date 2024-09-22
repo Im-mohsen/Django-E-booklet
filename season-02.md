@@ -377,7 +377,9 @@ class Post(models.Model):
 برای اینکه جداول توی دیتابیس ذخیره بشن از «makemigrations» و «migrate» استفاده میکنیم
 
 دستور migrate : مسئول اعمال و عدم اعمال مهاجرت(migration) است.
+
 دستور makemigrations : مسئول ایجاد مهاجرت(migration) های جدید بر اساس تغییراتی است که در مدل های خود ایجاد کرده اید.
+
 دستور sqlmigrate، : دستورات SQL را برای یک مهاجرت(migration) نمایش می دهد.
 
 با استفاده از دستور «makemigrations» چنانچه تغییری توی مدل اعمال شده باشد میاد و یک (migration) حاوی تغییرات جهت اعمال روی دیتابیس ایجاد میکند با این حال تغییری روی دیتابیس نمیدهد / هنگامی که از دستور «migrate» استفاده کنیم تغییرات روی دیتابیس اعمال میشن.
@@ -576,11 +578,11 @@ class PostAdmin(admin.ModelAdmin):
 اینها چهار عملکرد اصلی برای کار با پایگاه داده هستند.
 
 مثلا یک داده به جدول اضافه کنیم،
-یک یا چند مورد از داده ها انتخاب کنیم(از روی دیتابیس بخوانیم)
-تغییراتی توی داده ایجاد کنیم
+یک یا چند مورد از داده ها انتخاب کنیم(از روی دیتابیس بخوانیم)،
+تغییراتی توی داده ایجاد کنیم،
 ویا داده هایی را از دیتابیس حذف کنیم.
 
-این عملکردها را با ORM» انجام میدهیم.
+این عملکردها را با (ORM) انجام میدهیم.
 
 ---
 
@@ -693,9 +695,28 @@ python manage.py shell
 
 ---
 
-ایجاد داده در جدول دیتابیس ، با استفاده از متد <span class="en-text">create()</span>
 
- برای «user» بهتره از متد خاص خودش یعنی <span class="en-text">create_user()</span> استفاده کنیم (در این روش دیگر نیازی به متد <span class="en-text">save()</span> نیست):
+با استفاده از متد <span class="en-text">create()</span> میتوان بدون استفاده از متد <span class="en-text">save()</span>، یک query به صورت مستقیم ایجاد و در دیتابیس ذخیره کرد
+
+خب حالا بریم یک پست جدید ایجاد کنیم:
+
+``shell:``
+
+```shell
+>>> Post.objects.all()
+<QuerySet [<Post: Python>]>
+>>> post1 = Post.objects.create(author=user2, title='Django', description='Django is a free and open source web-based software framework')
+>>> post1
+<Post: Django>
+>>> Post.objects.all()
+<QuerySet [<Post: Python>, <Post: Django>]>
+```
+
+چون فیلد (author) از نوع (ForeignKey) هست بهتره از (user) ایجاد کرده استفاده کنیم نه رشته / مابقی فیلد ها هم پر میکنیم.
+
+از متد create میتوان بدون ذخیره در یک متغیر نیز، استفاده کرد.
+
+برای «user» بهتره از متد خاص خودش یعنی <span class="en-text">create_user()</span> استفاده کنیم (در این روش دیگر نیازی به متد <span class="en-text">save()</span> نیست):
 
 ```python
 # structure
@@ -713,22 +734,6 @@ User.objects.create_user()
 >>> User.objects.all()
 <QuerySet [<User: Mahdi>, <User: Ali>, <User: Mr_milad>]>
 ```
-
-خب حالا بریم یک پست جدید ایجاد کنیم:
-
-``shell:``
-
-```shell
->>> Post.objects.all()
-<QuerySet [<Post: Python>]>
->>> post1 = Post.objects.create(author=user2, title='Django', description='Django is a free and open source web-based software framework')
->>> post1
-<Post: Django>
->>> Post.objects.all()
-<QuerySet [<Post: Python>, <Post: Django>]>
-```
-
-چون فیلد (author) از نوع (ForeignKey) هست بهتره از (user) ایجاد کرده استفاده کنیم نه رشته / مابقی فیلد ها هم پر میکنیم.
 
 ---
 
@@ -778,6 +783,20 @@ User.objects.create_user()
 ```shell
 >>> Post.objects.filter(title='Django')
 <QuerySet [<Post: Django>]>
+```
+با استفاده از 2 تا underscore(__) میتوان فیلد های عناصر مشخص کننده در متد را مشخص کرد
+مثال ها
+```shell
+>>> posts1 = Post.objects.filter(user__id=2)
+>>> posts1
+<QuerySet [<Post: Django>]>
+>>>posts2 = Post.object.filter(publish__year=2023)
+>>>posts2
+<QuerySet [<Post: Java>, <Post: C#>]>
+>>>Post.object.filter(publish__year=2022, author__username="reza")
+<QuerySet [<Post: Python>]>
+>>>>>>Post.object.filter(publish__year=2024).filter(author__username="ali")
+<QuerySet [<Post: Html>]>
 ```
 
 ---

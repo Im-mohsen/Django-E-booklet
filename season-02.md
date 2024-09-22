@@ -785,6 +785,7 @@ User.objects.create_user()
 <QuerySet [<Post: Django>]>
 ```
 با استفاده از 2 تا underscore(__) میتوان فیلد های عناصر مشخص کننده در متد را مشخص کرد
+
 مثال ها
 ```shell
 >>> posts1 = Post.objects.filter(user__id=2)
@@ -795,7 +796,7 @@ User.objects.create_user()
 <QuerySet [<Post: Java>, <Post: C#>]>
 >>>Post.object.filter(publish__year=2022, author__username="reza")
 <QuerySet [<Post: Python>]>
->>>>>>Post.object.filter(publish__year=2024).filter(author__username="ali")
+>>>Post.object.filter(publish__year=2024).filter(author__username="ali")
 <QuerySet [<Post: Html>]>
 ```
 

@@ -766,6 +766,8 @@ User.objects.create_user()
 
 **متد <span class="en-text">get_or_create()</span>:**
 
+``shell:``
+
 ```shell
 >>> Post.objects.get_or_create(author_id=1, title='C language')
 (<Post: C language>, True)
@@ -780,6 +782,8 @@ User.objects.create_user()
 
 خروجی آن (کوئری ست) هستش.
 
+``shell:``
+
 ```shell
 >>> Post.objects.filter(title='Django')
 <QuerySet [<Post: Django>]>
@@ -787,6 +791,9 @@ User.objects.create_user()
 با استفاده از 2 تا underscore(__) میتوان فیلد های عناصر مشخص کننده در متد را مشخص کرد
 
 مثال ها
+
+``shell:``
+
 ```shell
 >>> posts1 = Post.objects.filter(user__id=2)
 >>> posts1
@@ -1185,6 +1192,8 @@ from . import views
 app_name = 'blog'
 
 urlpatterns = [
+    # path("URL-name-page+/",views.view-page-method,name='name for better access to URL')
+
     # URL For index page
     path('', views.index, name='index'),
     # URL For Post-Detail
@@ -1204,7 +1213,7 @@ urlpatterns = [
 
 #### کاربرد (app_name) و (name) در فایل (url)
 
-اگه خواستیم از (url) که ایجاد کرده ایم در جایی استفاده کنیم بجای نوشتن آن آدرس طولانی به صورت زیر عمل میکنیم:
+اگر در پروژه، چند اپلیکیشن داشتیم برای دسترسی راحت تر به urlهای هر اپلیکیشن میتوان برای فایل های (urls.py) آنها یک namespace (app_name) تعریف کنیم و بجای نوشتن آن آدرس طولانی به صورت زیر عمل میکنیم:
 
 app_name: (name in path)
 
@@ -1212,11 +1221,13 @@ blog: post_list
 
 ---
 
-الآن این (url)ها کار نمیکنند ما باید یکسری تغییرات توی فایل (urls.py) پروژه نه دایرکتوری اپ ایجاد کنیم (باید فایل urls.py اپ را بهش معرفی کنیم)
+الآن این (url)ها کار نمیکنند ما باید یکسری تغییرات توی فایل (urls.py) پروژه (نه دایرکتوری اپ) ایجاد کنیم (باید فایل urls.py اپ را بهش معرفی کنیم)
 
 ```python
 path('خالی یا یک آدرس', include('آدرس فایل url اپ', namespace="اسم اپ"))
 ```
+
+مقدار path بالا باید درون لیست urlpatterns فایل urls.py خود پروژه اضافه شود، همچنین باید include نیز به این فایل import شود.
 
 برای درک بیشتر به کد زیر توجه کنید.
 
